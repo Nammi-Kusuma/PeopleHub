@@ -1,0 +1,97 @@
+<div class="container py-4 fade-in">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow">
+        <div class="card-header bg-white py-3 border-bottom">
+          <div class="d-flex align-items-center">
+            <button class="btn btn-link text-muted p-0 me-3 d-flex align-items-center" (click)="onCancel()" style="text-decoration: none;">
+              <i class="bi bi-arrow-left me-2"></i> Back
+            </button>
+            <h4 class="mb-0 fw-bold">
+              <i class="bi bi-person-{{ personId ? 'check' : 'plus' }} me-2"></i>
+              {{ personId ? 'Edit Contact' : 'Add New Contact' }}
+            </h4>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <form [formGroup]="personForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+            <div class="mb-4">
+              <label for="name" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-person"></i>
+                </span>
+                <input type="text" class="form-control" id="name" formControlName="name"
+                       placeholder="Enter full name"
+                       [ngClass]="{'is-invalid': (personForm.get('name')?.invalid && personForm.get('name')?.touched) || (personForm.get('name')?.dirty && personForm.get('name')?.invalid)}">
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="personForm.get('name')?.hasError('required') && personForm.get('name')?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Name is required
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="personForm.get('name')?.hasError('minlength') && personForm.get('name')?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Name must be at least 3 characters long
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="age" class="form-label fw-medium">Age <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-person"></i>
+                </span>
+                <input type="number" class="form-control" id="age" formControlName="age"
+                       placeholder="Enter age"
+                       [ngClass]="{'is-invalid': (personForm.get('age')?.invalid && personForm.get('age')?.touched) || (personForm.get('age')?.dirty && personForm.get('age')?.invalid)}">
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="personForm.get('age')?.hasError('required') && personForm.get('age')?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Age is required
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="gender" class="form-label fw-medium">Gender <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-person"></i>
+                </span>
+                <input type="text" class="form-control" id="gender" formControlName="gender"
+                       placeholder="Enter gender"
+                       [ngClass]="{'is-invalid': (personForm.get('gender')?.invalid && personForm.get('gender')?.touched) || (personForm.get('gender')?.dirty && personForm.get('gender')?.invalid)}">
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="personForm.get('gender')?.hasError('required') && personForm.get('gender')?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Gender is required
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="phone" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-telephone"></i>
+                </span>
+                <input type="tel" class="form-control" id="phone" formControlName="phone"
+                       placeholder="Enter phone number"
+                       [ngClass]="{'is-invalid': (personForm.get('phone')?.invalid && personForm.get('phone')?.touched) || (personForm.get('phone')?.dirty && personForm.get('phone')?.invalid)}">
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="personForm.get('phone')?.hasError('required') && personForm.get('phone')?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Phone number is required
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="personForm.get('phone')?.hasError('pattern') && personForm.get('phone')?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Please enter a valid phone number
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between pt-3 border-top mt-4">
+              <button type="button" class="btn btn-outline-secondary px-4" (click)="onCancel()">
+                <i class="bi bi-x-lg me-2"></i> Cancel
+              </button>
+              <button type="submit" class="btn btn-primary px-4" [disabled]="personForm.invalid || !personForm.dirty">
+                <i class="bi bi-check-lg me-2"></i> {{ personId ? 'Update Contact' : 'Save Contact' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
