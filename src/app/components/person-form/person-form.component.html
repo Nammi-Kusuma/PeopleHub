@@ -52,11 +52,15 @@
               <label for="gender" class="form-label fw-medium">Gender <span class="text-danger">*</span></label>
               <div class="input-group">
                 <span class="input-group-text bg-light border-end-0">
-                  <i class="bi bi-person"></i>
+                  <i class="bi bi-gender-ambiguous"></i>
                 </span>
-                <input type="text" class="form-control" id="gender" formControlName="gender"
-                       placeholder="Enter gender"
-                       [ngClass]="{'is-invalid': (personForm.get('gender')?.invalid && personForm.get('gender')?.touched) || (personForm.get('gender')?.dirty && personForm.get('gender')?.invalid)}">
+                <select class="form-select" id="gender" formControlName="gender"
+                        [ngClass]="{'is-invalid': (personForm.get('gender')?.invalid && personForm.get('gender')?.touched) || (personForm.get('gender')?.dirty && personForm.get('gender')?.invalid)}">
+                  <option value="" disabled selected>Select gender</option>
+                  <option *ngFor="let option of genderOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
               </div>
               <div class="invalid-feedback d-block" *ngIf="personForm.get('gender')?.hasError('required') && personForm.get('gender')?.touched">
                 <i class="bi bi-exclamation-circle me-1"></i> Gender is required
@@ -64,30 +68,40 @@
             </div>
 
             <div class="mb-4">
-              <label for="phone" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
+              <label for="mobileNumber" class="form-label fw-medium">Mobile Number <span class="text-danger">*</span></label>
               <div class="input-group">
                 <span class="input-group-text bg-light border-end-0">
                   <i class="bi bi-telephone"></i>
                 </span>
-                <input type="tel" class="form-control" id="phone" formControlName="phone"
-                       placeholder="Enter phone number"
-                       [ngClass]="{'is-invalid': (personForm.get('phone')?.invalid && personForm.get('phone')?.touched) || (personForm.get('phone')?.dirty && personForm.get('phone')?.invalid)}">
+                <input type="tel" class="form-control" id="mobileNumber" formControlName="mobileNumber"
+                       placeholder="Enter mobile number"
+                       [ngClass]="{'is-invalid': (mobileNumber?.invalid && mobileNumber?.touched) || (mobileNumber?.dirty && mobileNumber?.invalid)}">
               </div>
-              <div class="invalid-feedback d-block" *ngIf="personForm.get('phone')?.hasError('required') && personForm.get('phone')?.touched">
-                <i class="bi bi-exclamation-circle me-1"></i> Phone number is required
+              <div class="invalid-feedback d-block" *ngIf="mobileNumber?.hasError('required') && mobileNumber?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Mobile number is required
               </div>
-              <div class="invalid-feedback d-block" *ngIf="personForm.get('phone')?.hasError('pattern') && personForm.get('phone')?.touched">
-                <i class="bi bi-exclamation-circle me-1"></i> Please enter a valid phone number
+              <div class="invalid-feedback d-block" *ngIf="mobileNumber?.hasError('pattern') && mobileNumber?.touched">
+                <i class="bi bi-exclamation-circle me-1"></i> Please enter a valid mobile number
               </div>
             </div>
 
-            <div class="d-flex justify-content-between pt-3 border-top mt-4">
-              <button type="button" class="btn btn-outline-secondary px-4" (click)="onCancel()">
-                <i class="bi bi-x-lg me-2"></i> Cancel
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-outline-secondary" (click)="onCancel()" [disabled]="isLoading">
+                <i class="bi bi-x-circle me-2"></i>Cancel
               </button>
-              <button type="submit" class="btn btn-primary px-4" [disabled]="personForm.invalid || !personForm.dirty">
-                <i class="bi bi-check-lg me-2"></i> {{ personId ? 'Update Contact' : 'Save Contact' }}
+              <button type="submit" class="btn btn-primary" [disabled]="personForm.invalid || isLoading">
+                <span *ngIf="!isLoading; else loading">
+                  <i class="bi bi-save me-2"></i>{{ personId ? 'Update' : 'Save' }}
+                </span>
+                <ng-template #loading>
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  {{ personId ? 'Updating...' : 'Saving...' }}
+                </ng-template>
               </button>
+            </div>
+            
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
             </div>
           </form>
         </div>

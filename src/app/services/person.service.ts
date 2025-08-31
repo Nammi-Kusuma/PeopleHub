@@ -1,49 +1,36 @@
 import { Injectable } from '@angular/core';
 import { Person } from '../models/person.model';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PersonService {
-  private people: Person[] = [
-    { id: 1, name: 'Kusuma Nammi', age: 20, gender: 'Female', phone: '9392504116' },
-    { id: 2, name: 'Jahnavi', age: 18, gender: 'Female', phone: '9030436909' }
-  ];
-  private nextId = 3;
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  backendUrl = 'https://peoplehub-backend.onrender.com';
+  // backendUrl = 'http://localhost:3000';
 
   getPeople(): Observable<Person[]> {
-    return of([...this.people]);
+    return this.http.get<Person[]>(`${this.backendUrl}/person`);
   }
 
-  getPerson(id: number): Observable<Person | undefined> {
-    const person = this.people.find(p => p.id === id);
-    return of(person ? { ...person } : undefined);
+  getPerson(id: string): Observable<Person | undefined> {
+    return this.http.get<Person>(`${this.backendUrl}/person/${id}`);
   }
 
   addPerson(person: Person): Observable<Person> {
-    const newPerson = { ...person, id: this.nextId++ };
-    this.people.push(newPerson);
-    return of(newPerson);
+    console.log(person);
+    return this.http.post<Person>(`${this.backendUrl}/person`, person);
   }
 
-  updatePerson(person: Person): Observable<Person> {
-    const index = this.people.findIndex(p => p.id === person.id);
-    if (index !== -1) {
-      this.people[index] = { ...person };
-      return of(this.people[index]);
-    }
-    throw new Error('Person not found');
+  updatePerson(id: string, person: Person): Observable<Person> {
+    return this.http.put<Person>(`${this.backendUrl}/person/${id}`, person);
   }
 
-  deletePerson(id: number): Observable<boolean> {
-    const index = this.people.findIndex(p => p.id === id);
-    if (index !== -1) {
-      this.people.splice(index, 1);
-      return of(true);
-    }
-    return of(false);
+  deletePerson(id: string): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.backendUrl}/person/${id}`);
   }
 }
